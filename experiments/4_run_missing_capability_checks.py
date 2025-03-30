@@ -92,8 +92,8 @@ def run_capability_check(model_name, probe_path=None, c=None, offensive=None, le
     return eval_output['results']['mmlu']
 
 
-def run_missing_capability_checks(model_name, base_path, single="multilayer"):
-    incomplete_file = Path(base_path) / model_name / "intervention" / "causal_intervention_parameters_with_capability_and_coherence_multilayer.csv"
+def run_missing_capability_checks(model_name, base_path, single):
+    incomplete_file = Path(base_path) / model_name / "intervention" / f"causal_intervention_parameters_with_capability_and_coherence_{single}.csv"
     if not incomplete_file.exists():
         print(f"Final results file not found: {incomplete_file}")
         return
@@ -163,12 +163,13 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description='Run missing capability checks.')
     parser.add_argument('--model_name', type=str, required=True, help='The name of the model to use for the capability check.')
     parser.add_argument('--base_path', type=str, required=True, help='The base path where the causal_intervention_parameters file is located.')
+    parser.add_argument('--single', type=str, required=True, help='The single layer or multilayer.')
     return parser.parse_args()
 
 
 def main():
     args = parse_arguments()
-    run_missing_capability_checks(args.model_name, args.base_path)
+    run_missing_capability_checks(args.model_name, args.base_path, args.single)
 
 
 if __name__ == '__main__':
